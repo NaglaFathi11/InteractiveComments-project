@@ -9,7 +9,7 @@ import ReplayIcon from "../ReplyIcon/ReplyIcon";
 import ReplyInput from "../ReplyInput/ReplyInput";
 
 export default function CommentItem() {
-  const { comments, CurrentUser, EditComment } = useCommentsArray();
+  const { comments, CurrentUser } = useCommentsArray();
   const currentUserUsername = CurrentUser[0]?.username;
   const [replyInputVisibility, setReplyInputVisibility] = useState({});
 
@@ -29,19 +29,14 @@ export default function CommentItem() {
   }
 
   // Edit function
-  const [editMode, setEditMode] = useState({}); // State to track which comment is in edit mode
-  const [newContent, setNewContent] = useState({});
-        const [showReplyInput, setShowReplyInput] = useState(false);
-
-
-  function handleToggleEdit(commentId newConent) {
-    setEditMode((prevEditMode) => ({
-      ...prevEditMode,
-      [commentId]: !prevEditMode[commentId], // Toggle the edit mode for this specific comment
-   
-   
-    }));
+  const [showInputoEdit, setShowInputoEdit] = useState(false);
+  function handleToggle() {
+    setShowInputoEdit(!showInputoEdit);
   }
+
+  // function updateShowInputoEdit() {
+  //   setShowInputoEdit();
+  // }
 
   function handeOnChangeEdit(event) {
     console.log(event.target.value);
@@ -86,13 +81,13 @@ export default function CommentItem() {
                   {comment.user.username === currentUserUsername && (
                     <EditComment
                       editCommentIdClicked={comment.id}
-                      handleToggle={() => handleToggleEdit(comment.id)}
+                      handleToggle={handleToggle}
                     />
                   )}
                 </div>
               </div>
               <div id="commentContent">
-                {editMode[comment.id] == true ? (
+                {showInputoEdit == true ? (
                   <>
                     <textarea onChange={handeOnChangeEdit}></textarea>
                     <button>Update</button>
