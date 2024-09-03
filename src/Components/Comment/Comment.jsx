@@ -17,21 +17,24 @@ export default function CommentItem() {
   function handleShowReplyIcon(commentId) {
     setReplyInputVisibility((prevVisibility) => ({
       ...prevVisibility,
-      [commentId]: true, // Show input for this comment
+      [commentId]: true,
     }));
   }
 
   function handleHideReplyIcon(commentId) {
     setReplyInputVisibility((prevVisibility) => ({
       ...prevVisibility,
-      [commentId]: false, // Hide input for this comment
+      [commentId]: false,
     }));
   }
 
   // Edit function
-  const [showInputoEdit, setShowInputoEdit] = useState(false);
-  function handleToggle() {
-    setShowInputoEdit(!showInputoEdit);
+  const [editMode, setEditMode] = useState({});
+  function handleToggleEdit(commentId) {
+    setEditMode((prevEditMode) => ({
+      ...prevEditMode,
+      [commentId]: !prevEditMode[commentId],
+    }));
   }
 
   // function updateShowInputoEdit() {
@@ -81,13 +84,14 @@ export default function CommentItem() {
                   {comment.user.username === currentUserUsername && (
                     <EditComment
                       editCommentIdClicked={comment.id}
-                      handleToggle={handleToggle}
+                      handleToggle={() => handleToggleEdit(comment.id)}
                     />
                   )}
                 </div>
               </div>
+
               <div id="commentContent">
-                {showInputoEdit == true ? (
+                {editMode[comment.id] ? (
                   <>
                     <textarea onChange={handeOnChangeEdit}></textarea>
                     <button>Update</button>
@@ -104,7 +108,7 @@ export default function CommentItem() {
             {replyInputVisibility[comment.id] && (
               <ReplyInput
                 idClickedComment={comment.id}
-                handleHideReplyInput={() => handleHideReplyIcon(comment.id)} // Pass hide function
+                handleHideReplyInput={() => handleHideReplyIcon(comment.id)}
                 replyingToUsername={comment.user.username}
               />
             )}
